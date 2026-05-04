@@ -60,7 +60,8 @@ const sendViaTelegram = async (form) => {
 
 const sendViaFormSubmit = async (form) => {
   const data = new FormData(form);
-  const response = await fetch('https://formsubmit.co/ajax/galoyandavid8@gmail.com', {
+  const ep = atob('Z2Fsb3lhbmRhdmlkOEBnbWFpbC5jb20=');
+  const response = await fetch(`https://formsubmit.co/ajax/${ep}`, {
     method: 'POST',
     headers: { Accept: 'application/json' },
     body: data,
@@ -108,10 +109,10 @@ if (contactForm && contactSuccess) {
       }
 
       resetSubmitButton(btn);
-      alert('Ошибка отправки. Попробуйте ещё раз или напишите нам в Telegram.');
+      alert('Не удалось отправить заявку. Напишите нам напрямую в Telegram: +7 906 404 44 88');
     } catch {
       resetSubmitButton(btn);
-      alert('Ошибка отправки. Проверьте соединение с интернетом.');
+      alert('Не удалось отправить заявку. Напишите нам в Telegram или WhatsApp: +7 906 404 44 88');
     }
   });
 }
