@@ -1,0 +1,10 @@
+.vercel
+node_modules
+.env
+.env.local
+
+# internal working docs
+TZ.md
+TZ_*.md
+AGENT_PROMPT.md
+DALLE_PROMPTS.md
