@@ -1,13 +1,17 @@
 :root {
-  --color-bg: #fafaf8;
+  --color-bg: #F3F2ED;
   --color-surface: #f4f0eb;
   --color-accent: #2d2d2d;
   --color-primary: #c8651a;
   --color-primary-dark: #a54f13;
   --color-primary-light: #f5e6d8;
-  --color-muted: #7a7068;
-  --color-border: #e5ddd4;
+  --color-muted: #8A8578;
+  --color-border: #D9D4CB;
   --color-white: #ffffff;
+  --color-olive: #7A7D5A;
+  --color-olive-dark: #586B54;
+  --color-linen: #E6DDD0;
+  --color-limestone: #C9C4B8;
 
   --font-heading: 'Manrope', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -177,6 +181,26 @@ p {
 .button--primary {
   background: var(--color-primary);
   color: var(--color-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.button--primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.22) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+.button--primary:hover::after,
+.button--primary:focus-visible::after {
+  left: 160%;
 }
 
 .button--primary:hover,
@@ -201,14 +225,14 @@ p {
   top: 0;
   z-index: 50;
   padding: 16px 0;
-  background: rgba(250, 250, 248, 0.9);
+  background: rgba(88, 107, 84, 0.97);
   backdrop-filter: blur(18px);
   transition: box-shadow 0.25s ease, background-color 0.25s ease;
 }
 
 .site-header.scrolled {
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: var(--shadow-header);
+  background: rgba(72, 89, 68, 0.99);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .site-nav {
@@ -232,8 +256,8 @@ p {
   width: 44px;
   height: 44px;
   border-radius: 14px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-white);
 }
 
 .brand__icon svg {
@@ -288,10 +312,10 @@ p {
   width: 48px;
   height: 48px;
   padding: 0;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 14px;
-  background: var(--color-white);
-  box-shadow: var(--shadow-soft);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
 }
 
 .nav-toggle span {
@@ -300,8 +324,21 @@ p {
   height: 2px;
   margin: 4px auto;
   border-radius: 999px;
-  background: var(--color-accent);
+  background: var(--color-white);
   transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.site-header .brand__text {
+  color: var(--color-white);
+}
+
+.site-header .nav-links a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.site-header .nav-links a:hover,
+.site-header .nav-links a:focus-visible {
+  color: var(--color-white);
 }
 
 .hero {
@@ -482,6 +519,7 @@ p {
   height: 56px;
   margin-bottom: 18px;
   font-size: 28px;
+  color: var(--color-olive);
 }
 
 .product-card {
@@ -490,23 +528,40 @@ p {
   gap: 16px;
 }
 
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-gap);
+}
+
+/* Пятая карточка — на всю ширину */
+.catalog-grid .product-card:last-child {
+  grid-column: 1 / -1;
+}
+
 .product-card__visual {
-  min-height: 180px;
-  border-radius: 12px;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
+  border-radius: calc(var(--radius-md) - 4px);
+  background: var(--color-linen);
+  margin-bottom: 20px;
 }
 
 .product-card__visual img {
   width: 100%;
-  height: 180px;
+  height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
 }
 
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-gap);
+.product-card:hover .product-card__visual img {
+  transform: scale(1.03);
+}
+
+/* Последняя карточка — более широкое изображение */
+.catalog-grid .product-card:last-child .product-card__visual {
+  aspect-ratio: 16 / 7;
 }
 
 .catalog-banner {
@@ -544,7 +599,7 @@ p {
   font-size: 40px;
   line-height: 1;
   font-weight: 800;
-  color: var(--color-primary);
+  color: var(--color-olive);
 }
 
 .tag-list {
@@ -560,10 +615,10 @@ p {
   min-height: 44px;
   padding: 10px 18px;
   border-radius: var(--radius-pill);
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
+  background: var(--color-linen);
+  border: 1px solid var(--color-limestone);
   box-shadow: var(--shadow-soft);
-  color: var(--color-accent);
+  color: var(--color-olive-dark);
   font-weight: 600;
 }
 
@@ -844,10 +899,11 @@ p {
     align-items: stretch;
     gap: 20px;
     padding: 20px;
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: var(--shadow-header);
+    background: rgba(72, 89, 68, 0.99);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(18px);
   }
 
   .site-nav.menu-open .nav-menu {
@@ -907,9 +963,20 @@ p {
   }
 
   .advantages-grid,
-  .catalog-grid,
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .catalog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-grid .product-card:last-child {
+    grid-column: auto;
+  }
+
+  .catalog-grid .product-card:last-child .product-card__visual {
+    aspect-ratio: 4 / 3;
   }
 
   .hero__visual {
@@ -1023,4 +1090,122 @@ p {
   font-weight: 800;
   color: var(--color-primary);
   margin: 0;
+}
+
+/* ── Modal ──────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(40, 37, 32, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-overlay.is-visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  max-width: 480px;
+  width: 100%;
+  padding: 40px 36px;
+  position: relative;
+  text-align: center;
+  transform: translateY(16px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.is-visible .modal-card {
+  transform: translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-muted);
+  padding: 4px;
+  line-height: 0;
+  transition: color 0.15s;
+}
+
+.modal-close:hover {
+  color: var(--color-accent);
+}
+
+.modal-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--color-olive);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 auto 20px;
+}
+
+.modal-hint {
+  font-size: var(--text-sm);
+  margin-top: 8px;
+  color: var(--color-muted);
+}
+
+.modal-hint a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ── Card hover lift ────────────────────────── */
+
+.advantage-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.advantage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Scroll reveal ──────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

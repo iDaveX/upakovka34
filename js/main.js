@@ -3,7 +3,8 @@ const nav = document.querySelector('.site-nav');
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelectorAll('.nav-links a, .nav-cta');
 const contactForm = document.getElementById('contact-form');
-const contactSuccess = document.getElementById('contact-success');
+const successModal = document.getElementById('success-modal');
+const modalClose = document.getElementById('modal-close');
 
 const syncHeaderState = () => {
   if (!header) {
@@ -30,9 +31,35 @@ const resetSubmitButton = (button) => {
 };
 
 const handleSuccess = () => {
-  contactForm.hidden = true;
-  contactSuccess.hidden = false;
+  if (contactForm) {
+    contactForm.reset();
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    if (submitBtn) resetSubmitButton(submitBtn);
+  }
+  if (!successModal) return;
+  successModal.setAttribute('aria-hidden', 'false');
+  successModal.classList.add('is-visible');
+  document.body.style.overflow = 'hidden';
 };
+
+const closeModal = () => {
+  if (!successModal) return;
+  successModal.classList.remove('is-visible');
+  successModal.setAttribute('aria-hidden', 'true');
+  setTimeout(() => {
+    document.body.style.overflow = '';
+  }, 250);
+};
+
+if (modalClose) modalClose.addEventListener('click', closeModal);
+if (successModal) {
+  successModal.addEventListener('click', (e) => {
+    if (e.target === successModal) closeModal();
+  });
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && successModal?.classList.contains('is-visible')) closeModal();
+});
 
 const sendViaTelegram = async (form) => {
   const payload = {
@@ -41,21 +68,23 @@ const sendViaTelegram = async (form) => {
     details: form.querySelector('[name="details"]').value.trim(),
   };
 
-  const response = await fetch('/api/submit', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const response = await fetch('/api/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
-  if (!response.ok) throw new Error('api-error');
+    if (!response.ok) return false;
 
-  const result = await response.json();
-  if (!result.ok) throw new Error('telegram-error');
-
-  return true;
+    const result = await response.json();
+    return result.ok === true;
+  } catch {
+    return false;
+  }
 };
 
 const sendViaFormSubmit = async (form) => {
@@ -86,7 +115,21 @@ if (nav && navToggle) {
 window.addEventListener('scroll', syncHeaderState, { passive: true });
 syncHeaderState();
 
-if (contactForm && contactSuccess) {
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.12 }
+);
+
+document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+if (contactForm) {
   contactForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     const btn = contactForm.querySelector('button[type="submit"]');
